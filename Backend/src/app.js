@@ -23,7 +23,7 @@ db.connect((err) => {
   }
 });
 // REGISTRAR USUARIOS
-app.post("/registro", (req, res) => {
+app.post("/usuario", (req, res) => {
   const { carnet, nombres, apellidos, contrasena, email } = req.body;
 
   // Realiza la inserción en la tabla de Usuarios
@@ -32,18 +32,18 @@ app.post("/registro", (req, res) => {
     [carnet, nombres, apellidos, contrasena, email],
     (err, result) => {
       if (err) {
-        console.error("Error al registrar al usuario: ", err);
-        res.status(500).send("Error al registrar al usuario");
+        // console.error("Error al registrar al usuario: ", err);
+        res.status(500).send({ error: err });
       } else {
-        console.log("Usuario registrado con éxito");
-        res.status(200).send("Usuario registrado con éxito");
+        // console.log("Usuario registrado con éxito");
+        res.status(200).send({ message: "Usuario registrado con éxito" });
       }
     }
   );
 });
 
 // ACTUALIZAR CONTRASENA
-app.put("/registro", (req, res) => {
+app.put("/usuario", (req, res) => {
   const { contrasena, carnet, email } = req.body;
 
   // Realiza la inserción en la tabla de Usuarios
@@ -52,27 +52,32 @@ app.put("/registro", (req, res) => {
     [contrasena, carnet, email],
     (err, result) => {
       if (result.affectedRows == 0) {
-        //console.error("Error al registrar al usuario: ", err);
-        res.status(500).send("Error al actualizar, datos incorrectos");
+        res.status(500).send({ error: "Credenciales Incorrectas" });
       } else {
-        console.log("Usuario registrado con éxito");
-        res.status(200).send("Usuario actualizado con éxito");
+        res
+          .status(200)
+          .send({ message: "Contraseña actualizada exitosamente" });
       }
     }
   );
 });
 
-// OBTENER TODOS LOS USUARIOS
-app.get("/registro", (req, res) => {
+// OBTENER USUARIO POR CARNET
+app.get("/usuario", (req, res) => {
   // Obtiene todas las publicaciones desde la base de datos
-  db.query("SELECT * FROM usuario", (err, results) => {
-    if (err) {
-      console.error("Error al obtener las publicaciones: ", err);
-      res.status(500).send("Error al obtener las publicaciones");
-    } else {
-      res.status(200).json(results);
+  const { carnet } = req.body;
+  db.query(
+    "SELECT * FROM usuario WHERE carnet= ?",
+    [carnet],
+    (err, results) => {
+      if (err) {
+        //console.error("Error al obtener las publicaciones: ", err);
+        res.status(500).send({ error: err });
+      } else {
+        res.status(200).json(results);
+      }
     }
-  });
+  );
 });
 
 // LOGIN
@@ -85,14 +90,13 @@ app.post("/login", (req, res) => {
     [carnet, contrasena],
     (err, results) => {
       if (err) {
-        console.error("Error al autenticar al usuario: ", err);
-        res.status(500).send("Error al autenticar al usuario");
+        //console.error("Error al autenticar al usuario: ", err);
+        res.status(500).send({ error: err });
       } else if (results.length === 0) {
-        res.status(401).send("Credenciales incorrectas");
+        res.status(401).send({ error: "Credenciales incorrectas" });
       } else {
-        console.log("Usuario autenticado con éxito");
-        res.status(200).json(results);
-        //console.log(results[0].idUsuario)
+        // console.log("Usuario autenticado con éxito");
+        res.status(200).json(results[0]);
       }
     }
   );
@@ -115,27 +119,62 @@ app.post("/publicacion", (req, res) => {
     [titulo, contenido, fecha_publicacion, sobre_quien, tipo, id_usuario],
     (err, result) => {
       if (err) {
-        console.error("Error al crear la publicación: ", err);
-        res.status(500).send("Error al crear la publicación");
+        //console.error("Error al crear la publicación: ", err);
+        res.status(500).send({ error: err });
       } else {
-        console.log("Publicación creada con éxito");
-        res.status(200).send("Publicación creada con éxito");
+        ///console.log("Publicación creada con éxito");
+        res.status(200).send({ message: "Publicación creada con éxito" });
       }
     }
   );
 });
 
-//OBTENER LA PUBLICACIÓN
+//OBTENER LAs PUBLICACIONES
 app.get("/publicaciones", (req, res) => {
   // Obtiene todas las publicaciones desde la base de datos
-  db.query("SELECT * FROM Publicaciones", (err, results) => {
+  db.query("SELECT * FROM Publicacion", (err, results) => {
     if (err) {
-      console.error("Error al obtener las publicaciones: ", err);
-      res.status(500).send("Error al obtener las publicaciones");
+      // console.error("Error al obtener las publicaciones: ", err);
+      res.status(500).send({ error: err });
     } else {
       res.status(200).json(results);
     }
   });
+});
+
+//OBTENER una publicacion
+app.get("/publicacion", (req, res) => {
+  const { id } = req.body;
+  db.query(
+    "SELECT * FROM Publicacion WHERE idPublicacion=?",
+    [id],
+    (err, results) => {
+      if (err) {
+        // console.error("Error al obtener las publicaciones: ", err);
+        res.status(500).send({ error: err });
+      } else {
+        res.status(200).json(results[0]);
+      }
+    }
+  );
+});
+
+// O -> Curso
+// 1-> Catedratico
+app.get("/filtro", (req, res) => {
+  const { tipo } = req.body;
+  db.query(
+    "SELECT * FROM Publicacion WHERE tipo = ?",
+    [tipo],
+    (err, results) => {
+      if (err) {
+        // console.error("Error al obtener las publicaciones: ", err);
+        res.status(500).send({ error: err });
+      } else {
+        res.status(200).json(results);
+      }
+    }
+  );
 });
 
 // CREAR COMENTARIO
@@ -148,11 +187,11 @@ app.post("/comentario", (req, res) => {
     [contenido, fecha, idPub, idUsuarioPub, idUsuarioActual],
     (err, result) => {
       if (err) {
-        console.error("Error al crear el comentario: ", err);
-        res.status(500).send("Error al crear el comentario");
+        // console.error("Error al crear el comentario: ", err);
+        res.status(500).send({ error: err });
       } else {
-        console.log("Comentario creado con éxito");
-        res.status(200).send("Comentario creado con éxito");
+        // console.log("Comentario creado con éxito");
+        res.status(200).send({ message: "Comentario creado" });
       }
     }
   );
@@ -160,15 +199,20 @@ app.post("/comentario", (req, res) => {
 
 // obtener los comentairos
 app.get("/comentario", (req, res) => {
+  const { id_pub } = req.body;
   // Obtiene todas las publicaciones desde la base de datos
-  db.query("SELECT * FROM Comentario", (err, results) => {
-    if (err) {
-      console.error("Error al obtener las publicaciones: ", err);
-      res.status(500).send("Error al obtener las publicaciones");
-    } else {
-      res.status(200).json(results);
+  db.query(
+    "SELECT * FROM Comentario WHERE Publicacion_idPublicacion = ?",
+    [id_pub],
+    (err, results) => {
+      if (err) {
+        // console.error("Error al obtener las publicaciones: ", err);
+        res.status(500).send({ error: err });
+      } else {
+        res.status(200).json(results);
+      }
     }
-  });
+  );
 });
 
 //agregar cursos
@@ -181,17 +225,17 @@ app.post("/agregarcurso", (req, res) => {
     [nombre, creditos],
     (err, result) => {
       if (err) {
-        console.error("Error al registrar el curso: ", err);
-        res.status(500).send("Error al registrar el curso");
+        // console.error("Error al registrar el curso: ", err);
+        res.status(500).send({ error: err });
       } else {
-        console.log("Curso registrado con éxito");
-        res.status(200).send("Curso registrado con éxito");
+        // console.log("Curso registrado con éxito");
+        res.status(200).send({ message: "Curso registrado con éxito" });
       }
     }
   );
 });
 
-//OBTENER cursos
+//OBTENER cursos por id
 app.get("/curso", (req, res) => {
   const { id_curso } = req.query;
 
@@ -200,14 +244,27 @@ app.get("/curso", (req, res) => {
     [id_curso],
     (err, result) => {
       if (err) {
-        console.error("Error al registrar el curso: ", err);
-        res.status(500).send("Error al registrar el curso");
+        // console.error("Error al registrar el curso: ", err);
+        res.status(500).send({ error: err });
       } else {
-        console.log("Curso registrado con éxito");
+        //console.log("Curso registrado con éxito");
         res.status(200).json(result);
       }
     }
   );
+});
+
+//OBTENER todos los cursos
+app.get("/cursos", (req, res) => {
+  db.query("SELECT * FROM curso", (err, result) => {
+    if (err) {
+      // console.error("Error al registrar el curso: ", err);
+      res.status(500).send({ error: err });
+    } else {
+      //console.log("Curso registrado con éxito");
+      res.status(200).json(result);
+    }
+  });
 });
 
 // AGREGAR CATEDRATICOS
@@ -220,11 +277,11 @@ app.post("/agregarcatedratico", (req, res) => {
     [nombre, creditos],
     (err, result) => {
       if (err) {
-        console.error("Error al registrar al catedratico: ", err);
-        res.status(500).send("Error al registrar al catedratico");
+        // console.error("Error al registrar al catedratico: ", err);
+        res.status(500).send({ error: err });
       } else {
         //console.log("Curso registrado con éxito");
-        res.status(200).send("Catedratico registrado con éxito");
+        res.status(200).send({ message: "Catedratico registrado con éxito" });
       }
     }
   );
@@ -238,7 +295,7 @@ async function obtenerCursos(id) {
     console.log(id);
     return response.data;
   } catch (error) {
-    console.error("Error al obtener curso: ", error);
+    console.error({ error: err });
     throw error;
   }
 }
@@ -251,8 +308,8 @@ app.post("/cursosg", async (req, res) => {
     [id_usuario],
     async (err, results) => {
       if (err) {
-        console.error("Error al obtener los cursos: ", err);
-        res.status(500).send("Error al obtener los cursos");
+        // console.error("Error al obtener los cursos: ", err);
+        res.status(500).send({ error: err });
       } else {
         try {
           const cursoPromises = results.map(async (curso) => {
@@ -269,8 +326,8 @@ app.post("/cursosg", async (req, res) => {
           // Devolver los resultados como JSON
           res.json(cursosConDatos);
         } catch (error) {
-          console.error("Error al procesar los cursos: ", error);
-          res.status(500).send("Error al procesar los cursos");
+          // console.error("Error al procesar los cursos: ", error);
+          res.status(500).send({ error: err });
         }
       }
     }
@@ -288,10 +345,10 @@ app.post("/ganado", (req, res) => {
     (err, result) => {
       if (err) {
         console.error("Error al registrar el curso ganado: ", err);
-        res.status(500).send("Error al registrar el curso ganado");
+        res.status(500).send({ error: err });
       } else {
         //console.log("Curso registrado con éxito");
-        res.status(200).send("Curso ganado registrado con éxito");
+        res.status(200).send({ message: "Curso ganado registrado" });
       }
     }
   );
