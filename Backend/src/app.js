@@ -158,7 +158,7 @@ app.get("/publicacion", (req, res) => {
     }
   );
 });
-
+// Comentario
 // O -> Curso
 // 1-> Catedratico
 app.get("/filtro", (req, res) => {
