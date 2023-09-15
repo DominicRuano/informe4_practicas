@@ -9,10 +9,10 @@ app.use(bodyParser.json());
 var mysql = require("mysql");
 
 var db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "root123",
-  database: "bd_4",
+  host: "bxbuke117r4gmf7aqsgj-mysql.services.clever-cloud.com",
+  user: "u4nabtaemgcrgwmo",
+  password: "7aAMGKGBDpIvdo2fZTGe",
+  database: "bxbuke117r4gmf7aqsgj",
 });
 
 db.connect((err) => {
@@ -63,7 +63,7 @@ app.put("/usuario", (req, res) => {
 });
 
 // OBTENER USUARIO POR CARNET
-app.get("/usuario", (req, res) => {
+app.post("/buscaru", (req, res) => {
   // Obtiene todas las publicaciones desde la base de datos
   const { carnet } = req.body;
   db.query(
@@ -115,7 +115,7 @@ app.post("/publicacion", (req, res) => {
 
   // Realiza la inserción en la tabla de Publicaciones
   db.query(
-    "INSERT INTO Publicacion (titulo, contenido, fecha_publicacion,sobre_quien,tipo,Usuario_idUsuario) VALUES (?, ?, ?,?,?,?)",
+    "INSERT INTO publicacion (titulo, contenido, fecha_publicacion,sobre_quien,tipo,Usuario_idUsuario) VALUES (?, ?, ?,?,?,?)",
     [titulo, contenido, fecha_publicacion, sobre_quien, tipo, id_usuario],
     (err, result) => {
       if (err) {
@@ -132,7 +132,7 @@ app.post("/publicacion", (req, res) => {
 //OBTENER LAs PUBLICACIONES
 app.get("/publicaciones", (req, res) => {
   // Obtiene todas las publicaciones desde la base de datos
-  db.query("SELECT * FROM Publicacion", (err, results) => {
+  db.query("SELECT * FROM publicacion", (err, results) => {
     if (err) {
       // console.error("Error al obtener las publicaciones: ", err);
       res.status(500).send({ error: err });
@@ -143,10 +143,10 @@ app.get("/publicaciones", (req, res) => {
 });
 
 //OBTENER una publicacion
-app.get("/publicacion", (req, res) => {
+app.post("/buscarpub", (req, res) => {
   const { id } = req.body;
   db.query(
-    "SELECT * FROM Publicacion WHERE idPublicacion=?",
+    "SELECT * FROM publicacion WHERE idPublicacion=?",
     [id],
     (err, results) => {
       if (err) {
@@ -161,10 +161,10 @@ app.get("/publicacion", (req, res) => {
 // Comentario
 // O -> Curso
 // 1-> Catedratico
-app.get("/filtro", (req, res) => {
+app.post("/filtro", (req, res) => {
   const { tipo } = req.body;
   db.query(
-    "SELECT * FROM Publicacion WHERE tipo = ?",
+    "SELECT * FROM publicacion WHERE tipo = ?",
     [tipo],
     (err, results) => {
       if (err) {
@@ -183,7 +183,7 @@ app.post("/comentario", (req, res) => {
 
   // Realiza la inserción en la tabla de Comentarios
   db.query(
-    "INSERT INTO Comentario (contenido, fecha_creacion, Publicacion_idPublicacion,Publicacion_Usuario_idUsuario,Usuario_idUsuario) VALUES (?, ?, ?,?,?)",
+    "INSERT INTO comentario (contenido, fecha_creacion, Publicacion_idPublicacion,Publicacion_Usuario_idUsuario,Usuario_idUsuario) VALUES (?, ?, ?,?,?)",
     [contenido, fecha, idPub, idUsuarioPub, idUsuarioActual],
     (err, result) => {
       if (err) {
@@ -198,11 +198,11 @@ app.post("/comentario", (req, res) => {
 });
 
 // obtener los comentairos
-app.get("/comentario", (req, res) => {
+app.post("/buscarc", (req, res) => {
   const { id_pub } = req.body;
   // Obtiene todas las publicaciones desde la base de datos
   db.query(
-    "SELECT * FROM Comentario WHERE Publicacion_idPublicacion = ?",
+    "SELECT * FROM comentario WHERE Publicacion_idPublicacion = ?",
     [id_pub],
     (err, results) => {
       if (err) {
@@ -236,7 +236,7 @@ app.post("/agregarcurso", (req, res) => {
 });
 
 //OBTENER cursos por id
-app.get("/curso", (req, res) => {
+app.post("/buscarcurso", (req, res) => {
   const { id_curso } = req.query;
 
   db.query(
@@ -290,7 +290,7 @@ app.post("/agregarcatedratico", (req, res) => {
 async function obtenerCursos(id) {
   try {
     const response = await axios.get(
-      `http://localhost:3000/curso?id_curso=${id}`
+      `https://api-taller4.onrender.com/buscarcurso?id_curso=${id}`
     ); // Reemplaza con tu URL
     console.log(id);
     return response.data;
