@@ -1,0 +1,94 @@
+/* PantallaPrincipal.css */
+.pantalla-principal {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    color: white;
+  }
+  
+  h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .nueva-publicacion {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Agrega esta línea para centrar horizontalmente */
+    margin-bottom: 20px;
+  }
+  
+  
+  textarea {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+    font-size: 16px;
+  }
+  
+  button {
+    background-color: #1877f2; /* Color de Facebook */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    margin-left: 10px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #0e5aef; /* Color de Facebook al pasar el mouse */
+  }
+  
+  .publicacion {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #3a3a3a;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .publicacion h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .publicacion p {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  
+  .publicacion .fecha {
+    color: #777;
+    font-size: 14px;
+  }
+  
+  /* Estilos para el tipo de publicación */
+  .publicacion .tipo-curso {
+    color: #4caf50; /* Verde */
+  }
+  
+  .publicacion .tipo-maestro {
+    color: #e91e63; /* Rosa */
+  }
+
+  .filtros {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .filtro {
+    margin: 10px; /* Espaciado entre los elementos dentro de .filtros */
+    width: 300px;
+  }
+  
+  
+  /* Otros estilos personalizados según tus preferencias */
+  

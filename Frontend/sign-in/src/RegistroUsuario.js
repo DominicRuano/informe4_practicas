@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import ReactDOM from 'react-dom';
+import './InicioSesion.css'; // Importa los estilos CSS
+import './pantallaPrincipal'; // Importa los estilos CSS
+import InicioSesion from './InicioSesion';
+import PantallaPrincipal from './pantallaPrincipal';
 
 
 
 const RegistroUsuario = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [formData, setFormData] = useState({
     carnet: "",
     nombre: '',
@@ -14,6 +18,8 @@ const RegistroUsuario = () => {
   });
 
   const [contraseñaObligatoria, setContraseñaObligatoria] = useState(false);
+
+  const iraLogin = () => {ReactDOM.render(<PantallaPrincipal />, document.getElementById('root'));}
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -63,7 +69,8 @@ const RegistroUsuario = () => {
 
       if (response.ok) {
         console.log('Registro exitoso');
-        navigate('/inicio-sesion');
+        mostrarMensajeDeError('Usuario Registrado con exito, se redirecciona a la pagina de inicio de sesion.');
+        ReactDOM.render(<InicioSesion />, document.getElementById('root'));
         // Puedes redirigir al usuario o mostrar un mensaje de éxito aquí.
       } else {
         const errorData = await response.json();
@@ -137,6 +144,10 @@ const RegistroUsuario = () => {
           />
         </div>
         <button type="submit">Registrar</button>
+      </form>
+      <form onSubmit={iraLogin}>
+        <label>¿Ya tienes una cuenta?</label>
+        <button>ir a login</button>
       </form>
       </div>
   );
