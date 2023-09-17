@@ -242,6 +242,18 @@ Luego de la ruta para poder acceder a la API, siguen las siguientes rutas
 >* Si existe un error regresa un Json con el error que ocacionó la interrupción
 >
 
+>  **Obtener a Todos los catedraticos**
+>```
+>/catedratico
+>```
+> No requiere de parametros
+> 
+> Método GET
+> 
+> * Si se obtiene respuestas regresa un arreglo, con JSON con los datos de la publicación 
+> * Si existe un error regresa un Json con el error que ocacionó la interrupción
+>
+
 >  **agregar un Catedratico**
 >```
 >/agregarcatedratico
