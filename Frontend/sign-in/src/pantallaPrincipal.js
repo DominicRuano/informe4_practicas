@@ -1,6 +1,9 @@
+import ReactDOM from 'react-dom';
 import React, { useState, useEffect } from 'react';
 import Publicacion from './Publicacion';
 import './pantallaPrincipal.css';
+import CrearPublicacion from './CrearPublicacion';
+import './CrearPublicacion.css';
 
 const PantallaPrincipal = () => {
   const [publicaciones, setPublicaciones] = useState([]);
@@ -28,8 +31,10 @@ const PantallaPrincipal = () => {
 
 
   const handlePublicar = () => {
+    ReactDOM.render(<CrearPublicacion />, document.getElementById('root'));
     // Hacer la solicitud a la API para crear una nueva publicación
   };
+  
 
   const filtrarPublicaciones = () => {
     let publicacionesFiltradas = publicaciones;
