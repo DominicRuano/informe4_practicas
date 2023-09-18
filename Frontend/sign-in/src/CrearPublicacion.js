@@ -3,6 +3,7 @@ import './CrearPublicacion.css';
 import { format } from 'date-fns';
 import ReactDOM from 'react-dom';
 import Publicacion from './Publicacion';
+import PantallaPrincipal from './pantallaPrincipal';
 
 const CrearPublicacion = () => {
   const [formData, setFormData] = useState({
@@ -118,6 +119,8 @@ const CrearPublicacion = () => {
     }
   };
 
+  const irAInicio = () => {ReactDOM.render(<PantallaPrincipal />, document.getElementById('root'));}
+
   return (
     <div className="crear-publicacion" style={{ marginTop: '45px', marginLeft: 'auto', marginRight: 'auto' }}>
       <h1>Crear Publicación</h1>
@@ -193,6 +196,9 @@ const CrearPublicacion = () => {
           {mensajeError && <div className="mensaje-error">{mensajeError}</div>}
         </div>
       </form>
+      <div> 
+        <button onClick={irAInicio}>Regresar</button>
+      </div>
     </div>
   );
 };
