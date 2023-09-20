@@ -14,6 +14,9 @@ const CrearPublicacion = () => {
     id_usuario: '',
   });
 
+  // idUsuario guarda el id asginado en el login
+  //const idUsuario = Cookies.get('idUsuario');
+
   //Estados para mostrar mensajes de error y éxito
   const [mensajeError, setMensajeError] = useState(null);
   const [mensajeExito, setMensajeExito] = useState(null);

@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import './InicioSesion.css'; // Importa los estilos CSS
 import PantallaPrincipal from './pantallaPrincipal';
 import ActualizarContraseña from './ActualizarContraseña';
+import Cookies from 'js-cookie'; // con js-cookie se puede asignar valores a cokies y llamarlos
 
 
 const InicioSesion = () => {
@@ -28,7 +29,7 @@ const InicioSesion = () => {
     // Borra el mensaje de error después de unos segundos (opcional).
     setTimeout(() => {
       mensajeError.remove();
-    }, 3000); // Elimina el mensaje después de 5 segundos (ajusta el tiempo según tus necesidades).
+    }, 4000); // Elimina el mensaje después de 5 segundos (ajusta el tiempo según tus necesidades).
   };
 
   const handleSubmit = async (e) => {
@@ -50,8 +51,10 @@ const InicioSesion = () => {
       });
 
       if (response.ok) {
+        const userData = await response.json();
         console.log('Registro exitoso');
-        mostrarMensajeDeError('¡Bienvenido!');
+        mostrarMensajeDeError('¡Bienvenido ' + userData.nombres + "!");
+        Cookies.set('idUsuario', userData.idUsuario);
         ReactDOM.render(<PantallaPrincipal />, document.getElementById('root'));
       }else {
         const errorData = await response.json();

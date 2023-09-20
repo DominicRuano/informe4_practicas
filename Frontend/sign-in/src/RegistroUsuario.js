@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './InicioSesion.css'; // Importa los estilos CSS
 import './pantallaPrincipal'; // Importa los estilos CSS
 import InicioSesion from './InicioSesion';
-import PantallaPrincipal from './pantallaPrincipal';
+//import PantallaPrincipal from './pantallaPrincipal';
 
 
 
@@ -88,6 +88,7 @@ const RegistroUsuario = () => {
       email: formData.correo,
     });
   };
+
 
   return (
     <div className="registro-usuario">
