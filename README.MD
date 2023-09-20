@@ -39,7 +39,7 @@ Luego de la ruta para poder acceder a la API, siguen las siguientes rutas
 >Espera un Json como el siguiente, enviado con PUT
 >```
 >{
->	"carnet":" ",
+>	"contrasena":" ",
 >	"carnet":" ",
 >	"email":" "
 >}

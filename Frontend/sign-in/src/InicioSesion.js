@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import './InicioSesion.css'; // Importa los estilos CSS
 import CrearPublicacion from './CrearPublicacion';
+import ActualizarContraseña from './ActualizarContraseña';
 
 
 const InicioSesion = () => {
@@ -11,7 +12,7 @@ const InicioSesion = () => {
     contraseña: '',
   });
 
-  const iraLogin = () => {ReactDOM.render(<InicioSesion />, document.getElementById('root'));}
+  const iraLogin = () => {ReactDOM.render(<ActualizarContraseña />, document.getElementById('root'));}
 
   const handleChange = (e) => {
     const { name, value } = e.target;
