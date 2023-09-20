@@ -53,7 +53,10 @@ const InicioSesion = () => {
         console.log('Registro exitoso');
         mostrarMensajeDeError('¡Bienvenido!');
         ReactDOM.render(<PantallaPrincipal />, document.getElementById('root'));
-  
+      }else {
+        const errorData = await response.json();
+        console.error('Error:', errorData);
+        mostrarMensajeDeError('Credenciales Incorrectas.');
       }
 
     } catch (error) {

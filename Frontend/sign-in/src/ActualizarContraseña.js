@@ -30,7 +30,7 @@ const ActualizarContraseña = () => {
     // Borra el mensaje de error después de unos segundos (opcional).
     setTimeout(() => {
       mensajeError.remove();
-    }, 3000); // Elimina el mensaje después de 5 segundos (ajusta el tiempo según tus necesidades).
+    }, 3000); // Elimina el mensaje después de 3 segundos (ajusta el tiempo según tus necesidades).
   };
 
   const handleSubmit = async (e) => {
