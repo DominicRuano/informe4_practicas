@@ -34,7 +34,7 @@ Luego de la ruta para poder acceder a la API, siguen las siguientes rutas
 > **Actualizar Contraseña**
 >  
 >```
->/usuario
+>/contrasena
 >```
 >Espera un Json como el siguiente, enviado con PUT
 >```

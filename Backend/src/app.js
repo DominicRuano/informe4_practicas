@@ -1,8 +1,10 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
+const cors = require("cors");
 const axios = require("axios");
 
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -17,7 +19,7 @@ var db = mysql.createConnection({
 
 db.connect((err) => {
   if (err) {
-    console.error("Error al conectar a la base de datos: ", err);
+    //console.error("Error al conectar a la base de datos: ", err);
   } else {
     console.log("Conexión exitosa a la base de datos");
   }
@@ -43,13 +45,33 @@ app.post("/usuario", (req, res) => {
 });
 
 // ACTUALIZAR CONTRASENA
-app.put("/usuario", (req, res) => {
+app.put("/contrasena", (req, res) => {
   const { contrasena, carnet, email } = req.body;
 
   // Realiza la inserción en la tabla de Usuarios
   db.query(
     "UPDATE usuario SET contrasena = ? WHERE carnet = ? AND email = ?",
     [contrasena, carnet, email],
+    (err, result) => {
+      if (result.affectedRows == 0) {
+        res.status(500).send({ error: "Credenciales Incorrectas" });
+      } else {
+        res
+          .status(200)
+          .send({ message: "Contraseña actualizada exitosamente" });
+      }
+    }
+  );
+});
+
+// ACTUALIZAR Datos de usuario por ID
+app.put("/usuario", (req, res) => {
+  const { nombres, apellidos, email, idUsuario } = req.body;
+
+  // Realiza la inserción en la tabla de Usuarios
+  db.query(
+    "UPDATE usuario SET nombres=?,apellidos=?,email=? WHERE idUsuario = ?",
+    [nombres, apellidos, email, idUsuario],
     (err, result) => {
       if (result.affectedRows == 0) {
         res.status(500).send({ error: "Credenciales Incorrectas" });
@@ -267,14 +289,27 @@ app.get("/cursos", (req, res) => {
   });
 });
 
+//OBTENER todos a todos los catedraticos
+app.get("/catedratico", (req, res) => {
+  db.query("SELECT * FROM catedratico", (err, result) => {
+    if (err) {
+      // console.error("Error al registrar el curso: ", err);
+      res.status(500).send({ error: err });
+    } else {
+      //console.log("Curso registrado con éxito");
+      res.status(200).json(result);
+    }
+  });
+});
+
 // AGREGAR CATEDRATICOS
 app.post("/agregarcatedratico", (req, res) => {
-  const { nombre, creditos } = req.body;
+  const { nombre, apellido } = req.body;
 
   // Realiza la inserción en la tabla de Usuarios
   db.query(
     "INSERT INTO catedratico (nombre, apellido) VALUES (?, ?)",
-    [nombre, creditos],
+    [nombre, apellido],
     (err, result) => {
       if (err) {
         // console.error("Error al registrar al catedratico: ", err);
@@ -292,7 +327,7 @@ async function obtenerCursos(id) {
     const response = await axios.get(
       `https://api-taller4.onrender.com/buscarcurso?id_curso=${id}`
     ); // Reemplaza con tu URL
-    console.log(id);
+    //console.log(id);
     return response.data;
   } catch (error) {
     console.error({ error: err });
@@ -344,11 +379,115 @@ app.post("/ganado", (req, res) => {
     [id_usuario, id_curso],
     (err, result) => {
       if (err) {
-        console.error("Error al registrar el curso ganado: ", err);
         res.status(500).send({ error: err });
       } else {
-        //console.log("Curso registrado con éxito");
         res.status(200).send({ message: "Curso ganado registrado" });
+      }
+    }
+  );
+});
+
+// Funciones No requeridas por el ENunciado
+
+// Eliminar un usuario
+app.delete("/usuario", (req, res) => {
+  const { id_usuario } = req.body;
+
+  // Realiza la inserción en la tabla de Usuarios
+  db.query(
+    "DELETE FROM usuario WHERE idUsuario=?",
+    [id_usuario],
+    (err, result) => {
+      if (err) {
+        res.status(500).send({ error: err });
+      } else {
+        res.status(200).send({ message: "Usuario eliminado con éxito" });
+      }
+    }
+  );
+});
+
+// Eliminar un comentario
+app.delete("/comentario", (req, res) => {
+  const { id_comen } = req.body;
+
+  // Realiza la inserción en la tabla de Usuarios
+  db.query(
+    "DELETE FROM comentario WHERE idComentario=?",
+    [id_comen],
+    (err, result) => {
+      if (err) {
+        res.status(500).send({ error: err });
+      } else {
+        res.status(200).send({ message: "Elemento eliminado con éxito" });
+      }
+    }
+  );
+});
+
+// Eliminar un Publicacion
+app.delete("/publicacion", (req, res) => {
+  const { id_pub } = req.body;
+
+  // Realiza la inserción en la tabla de Usuarios
+  db.query(
+    "DELETE FROM publicacion WHERE idPublicacion=?",
+    [id_pub],
+    (err, result) => {
+      if (err) {
+        res.status(500).send({ error: err });
+      } else {
+        res.status(200).send({ message: "Elemento eliminado con éxito" });
+      }
+    }
+  );
+});
+
+// Eliminar un curso aprobado
+app.delete("/cursog", (req, res) => {
+  const { idUsuarioCurso } = req.body;
+
+  // Realiza la inserción en la tabla de Usuarios
+  db.query(
+    "DELETE FROM usuariocurso WHERE idUsuarioCurso=?",
+    [idUsuarioCurso],
+    (err, result) => {
+      if (err) {
+        res.status(500).send({ error: err });
+      } else {
+        res.status(200).send({ message: "Elemento eliminado con éxito" });
+      }
+    }
+  );
+});
+
+// Eliminar un curso
+app.delete("/curso", (req, res) => {
+  const { idCurso } = req.body;
+
+  // Realiza la inserción en la tabla de Usuarios
+  db.query("DELETE FROM curso WHERE idCurso=?", [idCurso], (err, result) => {
+    if (err) {
+      res.status(500).send({ error: err });
+    } else {
+      res.status(200).send({ message: "Elemento eliminado con éxito" });
+    }
+  });
+});
+
+// Eliminar un catedratico
+app.delete("/catedratico", (req, res) => {
+  const { idCatedratico } = req.body;
+
+  // Realiza la inserción en la tabla de Usuarios
+  db.query(
+    "DELETE FROM catedratico WHERE idCatedratico=?",
+    [idCatedratico],
+    (err, result) => {
+      if (err) {
+        res.status(500).send({ error: err });
+      } else {
+        res.status(200).send({ message: "Elemento eliminado con éxito" });
       }
     }
   );
