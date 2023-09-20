@@ -19,7 +19,7 @@ const RegistroUsuario = () => {
 
   const [contraseñaObligatoria, setContraseñaObligatoria] = useState(false);
 
-  const iraLogin = () => {ReactDOM.render(<PantallaPrincipal />, document.getElementById('root'));}
+  const iraLogin = () => {ReactDOM.render(<InicioSesion />, document.getElementById('root'));}
 
   const handleChange = (e) => {
     const { name, value } = e.target;
