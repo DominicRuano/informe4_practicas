@@ -30,7 +30,7 @@ const ActualizarContraseña = () => {
     // Borra el mensaje de error después de unos segundos (opcional).
     setTimeout(() => {
       mensajeError.remove();
-    }, 5000); // Elimina el mensaje después de 5 segundos (ajusta el tiempo según tus necesidades).
+    }, 3000); // Elimina el mensaje después de 5 segundos (ajusta el tiempo según tus necesidades).
   };
 
   const handleSubmit = async (e) => {
@@ -45,7 +45,7 @@ const ActualizarContraseña = () => {
     
     setContraseñaObligatoria(false);
     
-    const url = 'https://api-taller4.onrender.com/usuario'; // URL de la API
+    const url = 'https://api-taller4.onrender.com/contrasena'; // URL de la API
 
     try {
       const response = await fetch(url, {
@@ -68,8 +68,9 @@ const ActualizarContraseña = () => {
       } else {
         const errorData = await response.json();
         console.error('Error:', errorData);
-        mostrarMensajeDeError('El correo electrónico o  Carné ya está registrado.');
+        mostrarMensajeDeError('Datos erroneos, verifica el carnet o corre electronico.');
       }
+
     } catch (error) {
       console.error('Error en la solicitud:', error);
     }
