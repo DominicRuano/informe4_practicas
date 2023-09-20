@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import './InicioSesion.css'; // Importa los estilos CSS
-import CrearPublicacion from './CrearPublicacion';
+import PantallaPrincipal from './pantallaPrincipal';
 import ActualizarContraseña from './ActualizarContraseña';
 
 
@@ -52,7 +52,7 @@ const InicioSesion = () => {
       if (response.ok) {
         console.log('Registro exitoso');
         mostrarMensajeDeError('¡Bienvenido!');
-        ReactDOM.render(<CrearPublicacion />, document.getElementById('root'));
+        ReactDOM.render(<PantallaPrincipal />, document.getElementById('root'));
   
       }
 
