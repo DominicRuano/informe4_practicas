@@ -51,6 +51,28 @@ Luego de la ruta para poder acceder a la API, siguen las siguientes rutas
 > Si existe un error regresa un Json con el error que ocacionó la interrupción
 >
 
+> **Actualizar Usuario por ID**
+>  
+>```
+>/usuario
+>```
+>Espera un Json como el siguiente, enviado con PUT
+>```
+>{
+>	"nombres":" ",
+>	"apellidos":" ",
+>	"email":" "
+>   "idUsuario":" "
+>}
+>```
+> Si el registro es exitoso retorna un:
+>```
+>{ message: "Contraseña actualizada exitosamente" }
+>```
+> Si existe un error regresa un Json con el error que ocacionó la interrupción
+> 
+
+
 > **Obtener usuraio por carnet**
 >  
 >```
