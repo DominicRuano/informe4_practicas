@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import Cookies from 'js-cookie';
 
-const Publicacion = ({ publicacion }) => {
+const Publicacion = ({ publicacion, actualizarComentarios }) => {
   const tipo = publicacion.tipo === 0 ? 'Curso' : 'Maestro';
   const [comentarios, setComentarios] = useState([]);
   const [nuevoComentario, setNuevoComentario] = useState('');
@@ -15,7 +16,12 @@ const Publicacion = ({ publicacion }) => {
   };
 
   useEffect(() => {
-    // Realiza una solicitud POST para obtener los comentarios de esta publicación
+    obtenerComentarios();
+  }, [publicacion.idPublicacion]);
+
+  const idUsuario = Cookies.get('idUsuario');  // Obtener el valor de la cookie 'idUsuario'
+
+  const obtenerComentarios = () => {
     fetch('https://api-taller4.onrender.com/buscarc', {
       method: 'POST',
       headers: {
@@ -34,29 +40,43 @@ const Publicacion = ({ publicacion }) => {
       .catch((error) => {
         console.error('Error al obtener los comentarios:', error);
       });
-  }, [publicacion.idPublicacion]);
+  };
 
   const handleComentarioChange = (event) => {
     setNuevoComentario(event.target.value);
   };
 
   const enviarComentario = () => {
-    // Realiza una solicitud POST para enviar el comentario a la API
-    fetch('https://api-taller4.onrender.com/agregar-comentario', {
+    const fechaActual = new Date().toISOString().slice(0, 19).replace("T", " ");
+
+    const comentarioData = {
+      contenido: nuevoComentario,
+      fecha: fechaActual,
+      idPub: publicacion.idPublicacion,
+      idUsuarioPub: publicacion.Usuario_idUsuario,
+      idUsuarioActual: idUsuario,  // Utiliza el valor de la cookie
+    };
+
+    fetch('https://api-taller4.onrender.com/comentario', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ id_pub: publicacion.idPublicacion, contenido: nuevoComentario }),
+      body: JSON.stringify(comentarioData),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Error al agregar un comentario');
+        }
+        return response.json();
+      })
       .then((data) => {
-        // Actualiza la lista de comentarios después de agregar un comentario nuevo
-        if (Array.isArray(data)) {
-          setComentarios(data);
-          setNuevoComentario(''); // Borra el contenido del campo de comentario
+        if (data.message === "Comentario creado") {
+          obtenerComentarios();  // Actualiza los comentarios después de agregar uno
+          setNuevoComentario('');
+          actualizarComentarios(data); // Actualiza los comentarios en todas las publicaciones
         } else {
-          console.error('La respuesta de la API después de agregar un comentario no es un arreglo:', data);
+          console.error('La respuesta de la API después de agregar un comentario no es válida:', data);
         }
       })
       .catch((error) => {
@@ -65,36 +85,42 @@ const Publicacion = ({ publicacion }) => {
   };
 
   return (
-    <div className="publicacion">
-      <h2>{publicacion.titulo}</h2>
-      <p>Tipo: {tipo}</p>
-      <p>{publicacion.contenido}</p>
-      <p className="fecha">Fecha: {fechaFormateada()}</p>
-      <p>Sobre: {publicacion.sobre_quien}</p>
-      
-      {comentarios.length > 0 && (
-        <div className="comentarios">
-          <h3>Comentarios:</h3>
-          <ul>
-            {comentarios.map((comentario, index) => (
-              <li key={index}>{comentario.contenido}</li>
-            ))}
-          </ul>
+    <div>
+      <div className="publicacion">
+        {/* Contenido de la publicación */}
+        <h2>{publicacion.titulo}</h2>
+        <p>Tipo: {tipo}</p>
+        <p>{publicacion.contenido}</p>
+        <p className="fecha">Fecha: {fechaFormateada()}</p>
+        <p>Sobre: {publicacion.sobre_quien}</p>
+        
+        {comentarios.length > 0 && (
+          <div className="comentarios">
+            <h3>Comentarios:</h3>
+            <ul>
+              {comentarios.map((comentario, index) => (
+                <li key={index}>{comentario.contenido}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+  
+        <div className="nuevo-comentario">
+          <input
+            type="text"
+            placeholder="Escribe un comentario..."
+            value={nuevoComentario}
+            onChange={handleComentarioChange}
+          />
+          <button onClick={enviarComentario}>Comentar</button>
         </div>
-      )}
-
-      {/* Agregar campo de comentario y botón */}
-      <div className="nuevo-comentario">
-        <input
-          type="text"
-          placeholder="Escribe un comentario..."
-          value={nuevoComentario}
-          onChange={handleComentarioChange}
-        />
-        <button onClick={enviarComentario}>Comentar</button>
       </div>
     </div>
   );
+  
+  
+  
+  
 };
 
 export default Publicacion;
