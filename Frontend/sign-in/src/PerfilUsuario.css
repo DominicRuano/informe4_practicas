@@ -1,0 +1,41 @@
+/* perfilUsuario.css */
+
+/* Estilos para el contenedor del perfil de usuario */
+.perfil-usuario {
+    max-width: 400px;
+    margin: 40px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #444;
+    box-shadow: 0 0 10px rgba(240, 240, 240, 0.1);
+  }
+  
+  /* Estilos para el título del perfil de usuario */
+  .perfil-usuario h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #0e0e0e;
+  }
+  
+  /* Estilos para los datos del usuario */
+  .perfil-usuario p {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  
+  /* Estilos para los nombres de los campos */
+  .perfil-usuario strong {
+    font-weight: bold;
+    color: #000000;
+  }
+  
+  /* Estilos para el mensaje cuando no se encuentran datos del usuario */
+  .perfil-usuario .mensaje-error {
+    font-size: 16px;
+    color: #f00;
+    margin-top: 20px;
+  }
+  
+  /* Otros estilos según tus necesidades */
+  

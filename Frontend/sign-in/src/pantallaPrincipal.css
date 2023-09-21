@@ -89,6 +89,15 @@
     width: 300px;
   }
   
-  
-  /* Otros estilos personalizados según tus preferencias */
-  
+  /* Estilos para centrar elementos en la clase "buscar" */
+.buscar {
+  display: flex; /* Usar flexbox para centrar los elementos */
+  justify-content: center; /* Centrar horizontalmente */
+  align-items: center; /* Centrar verticalmente */
+  margin-top: 20px; /* Espacio superior opcional */
+}
+
+/* Estilos para el botón de búsqueda */
+.buscar button {
+  margin-left: 10px; /* Espacio entre el input y el botón */
+}
